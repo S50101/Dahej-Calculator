@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dahej Calculator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f0f0f0;
+        }
+        .container {
+            text-align: center;
+            background: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .logo {
+            font-size: 2em;
+            color: #fff;
+            background-color: #ff5722;
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+        .description {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-size: 1.2em;
+            margin-bottom: 20px;
+            color: #333;
+        }
+        .disclaimer {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-size: 0.9em;
+            color: #777;
+            margin-top: 20px;
+        }
+        .reminder {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-size: 1em;
+            color: #777;
+            margin-top: 20px;
+            font-weight: bold;
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        label {
+            margin: 10px 0 5px;
+        }
+        input, select {
+            padding: 10px;
+            margin-bottom: 10px;
+            width: 200px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        .calculate-btn {
+            background-color: #ff5722;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1em;
+        }
+        .result-page {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+        }
+        .result {
+            font-size: 2em;
+            color: #333;
+            height: 2em;
+        }
+        .back-btn {
+            margin-top: 20px;
+            background-color: #ff5722;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1em;
+        }
+        .other-input {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container" id="inputPage">
+        <div class="logo">Dahej Calculator</div>
+        <div class="description">Calculate The Amount Of Dahej You Deserve</div>
+        <form id="dahejForm">
+            <label for="age">Age:</label>
+            <input type="number" id="age" name="age" min="18" required>
+
+            <label for="profession">Profession:</label>
+            <select id="profession" name="profession" onchange="showOtherInput('profession')" required>
+                <option value="engineer">Engineer</option>
+                <option value="doctor">Doctor</option>
+                <option value="teacher">Teacher</option>
+                <option value="lawyer">Lawyer</option>
+                <option value="other">Other</option>
+            </select>
+            <input type="text" id="professionOther" class="other-input" name="professionOther" placeholder="Please specify">
+
+            <label for="income">Annual Income (INR):</label>
+            <input type="number" id="income" name="income" min="0" required>
+
+            <label for="education">Education:</label>
+            <select id="education" name="education" onchange="showOtherInput('education')" required>
+                <option value="phd">PhD</option>
+                <option value="masters">Master's</option>
+                <option value="bachelors">Bachelor's</option>
+                <option value="highschool">High School</option>
+                <option value="other">Other</option>
+            </select>
+            <input type="text" id="educationOther" class="other-input" name="educationOther" placeholder="Please specify">
+
+            <label for="house">Own House:</label>
+            <select id="house" name="house" required>
+                <option value="yes">Yes</option>
+                <option value="no">No</option>
+            </select>
+
+            <label for="location">Living Place:</label>
+            <select id="location" name="location" onchange="showOtherInput('location')" required>
+                <option value="city">City</option>
+                <option value="town">Town</option>
+                <option value="village">Village</option>
+                <option value="other">Other</option>
+            </select>
+            <input type="text" id="locationOther" class="other-input" name="locationOther" placeholder="Please specify">
+
+            <button type="button" class="calculate-btn" onclick="calculateDahej()">Calculate Dahej</button>
+        </form>
+        <div class="disclaimer">
+            This calculator is just for fun. We do not promote or endorse the practice of dowry. Real men do not take dowry.
+        </div>
+    </div>
+    
+    <div class="container result-page" id="resultPage">
+        <div>Estimated Dahej Amount:</div>
+        <div class="result" id="result">₹0</div>
+        <div class="reminder">Remember, Real Men Do Not Take Dowry</div>
+        <button class="back-btn" onclick="goBack()">Back</button>
+    </div>
+
+    <script>
+        function showOtherInput(field) {
+            const selectElement = document.getElementById(field);
+            const otherInputElement = document.getElementById(field + 'Other');
+            if (selectElement.value === 'other') {
+                otherInputElement.style.display = 'block';
+                otherInputElement.required = true;
+            } else {
+                otherInputElement.style.display = 'none';
+                otherInputElement.required = false;
+            }
+        }
+
+        function calculateDahej() {
+            const age = parseInt(document.getElementById('age').value);
+            const profession = document.getElementById('profession').value === 'other' ? document.getElementById('professionOther').value : document.getElementById('profession').value;
+            const income = parseInt(document.getElementById('income').value);
+            const education = document.getElementById('education').value === 'other' ? document.getElementById('educationOther').value : document.getElementById('education').value;
+            const house = document.getElementById('house').value;
+            const location = document.getElementById('location').value === 'other' ? document.getElementById('locationOther').value : document.getElementById('location').value;
+
+            let dahej = 0;
+
+            // Sample logic for dahej calculation
+            if (income > 500000) { // 5 Lakh
+                dahej += income * 0.2;
+            } else {
+                dahej += income * 0.1;
+            }
+
+            if (house === 'yes') {
+                dahej += 100000; // 1 Lakh
+            }
+
+            if (education.toLowerCase().includes('phd') || education.toLowerCase().includes('doctor')) {
+                dahej += 200000; // 2 Lakh
+            } else if (education.toLowerCase().includes('masters')) {
+                dahej += 100000; // 1 Lakh
+            } else if (education.toLowerCase().includes('bachelors')) {
+                dahej += 50000; // 0.5 Lakh
+            }
+
+            dahej += age * 1000; // Just an example factor for age
+
+            // Show result in a new interface with animation
+            document.getElementById('inputPage').style.display = 'none';
+            document.getElementById('resultPage').style.display = 'flex';
+
+            let currentAmount = 0;
+            const increment = dahej / 200; // Adjusting for a 2-second animation
+            const resultElement = document.getElementById('result');
+            resultElement.innerText = `₹0`;
+
+            const interval = setInterval(() => {
+                currentAmount += increment;
+                resultElement.innerText = `₹${Math.floor(currentAmount).toLocaleString()}`;
+                if (currentAmount >= dahej) {
+                    clearInterval(interval);
+                    resultElement.innerText = `₹${dahej.toLocaleString()}`;
+                }
+            }, 10); // Animation duration of 2 seconds
+        }
+
+        function goBack() {
+            document.getElementById('resultPage').style.display = 'none';
+document.getElementById('inputPage').style.display = 'block';
+        }
+    </script>
+</body>
+</html>
